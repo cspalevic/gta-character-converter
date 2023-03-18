@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ChangeEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import cx from "classnames";
 import { RenderProps, usePrompt } from "use-prompt";
 import { IconButton } from "@/ui/IconButton/IconButton";
@@ -16,6 +10,7 @@ import { RetryIcon } from "@/ui/Icons/RetryIcon";
 import { UploadIcon } from "@/ui/Icons/UploadIcon";
 import { dataUrlToBlob, handleRequest } from "@/lib/browser";
 import styles from "./page.module.css";
+import { useCamera } from "@/lib/hooks/camera";
 
 const IMAGE_MIME_TYPE = "image/png";
 
@@ -59,29 +54,12 @@ function Prompt({ resolve, visible }: RenderProps) {
 }
 
 export default function Home() {
-  const [prompt, showPrompt] = usePrompt();
   const video = useRef<HTMLVideoElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const image = useRef<HTMLImageElement | null>(null);
-  const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-
-  const getWindowSize = useCallback(() => {
-    let width, height;
-    if (window.innerWidth <= 641) {
-      width = window.innerWidth;
-      height = window.innerHeight * 0.8;
-    } else if (window.innerWidth <= 961) {
-      // TODO: Do something else
-      width = window.innerWidth;
-      height = window.innerHeight - 100;
-    } else {
-      // TODO: Do something else
-      width = window.innerWidth;
-      height = window.innerHeight - 100;
-    }
-    return { width, height };
-  }, []);
+  const [prompt, showPrompt] = usePrompt();
+  const { startCamera, flipCamera, getSnapshot } = useCamera(video);
 
   const handleUpload = async (): Promise<{
     success: boolean;
@@ -170,22 +148,6 @@ export default function Home() {
     });
   };
 
-  const startCamera = async () => {
-    const { width, height } = getWindowSize();
-
-    const camera = await navigator.mediaDevices.getUserMedia({
-      video: {
-        width,
-        height,
-        facingMode,
-      },
-    });
-    if (video.current) {
-      video.current.srcObject = camera;
-      video.current.play();
-    }
-  };
-
   const resetPicture = () => {
     setImageSrc(null);
     startCamera();
@@ -194,20 +156,8 @@ export default function Home() {
   const takePicture = () => {
     if (!video.current || !canvas.current) return;
 
-    const { width, height } = getWindowSize();
-
-    const context = canvas.current.getContext("2d");
-    canvas.current.width = width;
-    canvas.current.height = height;
-    context?.drawImage(video.current, 0, 0, width, height);
-
-    const dataUrl = canvas.current.toDataURL(IMAGE_MIME_TYPE);
+    const dataUrl = getSnapshot(canvas.current, IMAGE_MIME_TYPE);
     setImageSrc(dataUrl);
-  };
-
-  const flipPicture = () => {
-    setFacingMode(facingMode === "user" ? "environment" : "user");
-    startCamera();
   };
 
   useEffect(() => {
@@ -216,6 +166,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("resize", startCamera);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -233,7 +184,7 @@ export default function Home() {
             src={imageSrc}
           />
         ) : (
-          <video ref={video} className={styles.video} />
+          <video ref={video} className={styles.video} playsInline />
         )}
         <footer className={styles.footer}>
           <button className={styles.galleryButton} onClick={() => {}} />
@@ -254,7 +205,7 @@ export default function Home() {
               >
                 <PictureIcon />
               </IconButton>
-              <IconButton onClick={() => flipPicture()}>
+              <IconButton onClick={() => flipCamera()}>
                 <FlipIcon />
               </IconButton>
             </>

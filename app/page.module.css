@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .canvas {
@@ -74,18 +74,18 @@
 }
 
 .prompt .inputContainerError input {
-  border-color: rgb(190 18 60);
+  border-bottom-color: rgb(190 18 60);
 }
 
 .prompt input {
   padding: 5px;
   font-size: 16px;
-  border-radius: 5px;
   border: none;
-  border-color: transparent;
-  border-width: 1px;
-  border-style: solid;
+  border-bottom-color: #fff;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
   outline: none;
+  background: transparent;
 }
 
 .prompt .error {
