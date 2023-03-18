@@ -11,6 +11,7 @@ import { UploadIcon } from "@/ui/Icons/UploadIcon";
 import { dataUrlToBlob, handleRequest } from "@/lib/browser";
 import styles from "./page.module.css";
 import { useCamera } from "@/lib/hooks/camera";
+import { useUpload } from "@/lib/hooks/upload";
 
 const IMAGE_MIME_TYPE = "image/png";
 
@@ -60,67 +61,16 @@ export default function Home() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [prompt, showPrompt] = usePrompt();
   const { startCamera, flipCamera, getSnapshot } = useCamera(video);
-
-  const handleUpload = async (): Promise<{
-    success: boolean;
-    error?: string;
-    data?: any;
-  }> => {
-    try {
-      if (!imageSrc) return { success: false, error: "No image" };
-
-      const [sessionError, session] = await handleRequest("/api/upload", {
-        method: "POST",
-        body: JSON.stringify({ fileType: IMAGE_MIME_TYPE }),
-      });
-      if (sessionError) {
-        return { success: false, error: "Error creating upload session" };
-      }
-
-      const { uploadId, url, fields } = session;
-      const blobData = dataUrlToBlob(imageSrc, IMAGE_MIME_TYPE);
-      const formData = new FormData();
-      Object.entries({ ...fields, file: blobData }).forEach(([key, value]) => {
-        formData.append(key, value as string);
-      });
-
-      const [[predictionError, prediction], [uploadError]] = await Promise.all([
-        await handleRequest("/api/predict", {
-          method: "POST",
-          body: imageSrc,
-        }),
-        await handleRequest(
-          url,
-          {
-            method: "POST",
-            body: formData,
-          },
-          { skipParse: true }
-        ),
-      ]);
-
-      if (predictionError) {
-        return { success: false, error: "Error creating prediction" };
-      }
-      if (uploadError) {
-        return { success: false, error: "Error creating upload" };
-      }
-
-      return { success: true, data: { uploadId, prediction } };
-    } catch (error) {
-      console.error("Catch-all error inside handleUpload", error);
-      return { success: false, error: "Something went wrong" };
-    }
-  };
+  const upload = useUpload();
 
   const convert = async () => {
     if (!imageSrc) return;
 
-    const upload = handleUpload();
+    const pendingUpload = upload(imageSrc, IMAGE_MIME_TYPE);
 
     const name = await showPrompt((props) => <Prompt {...props} />);
 
-    const { success, error, data } = await upload;
+    const { success, error, data } = await pendingUpload;
     if (!success) {
       // Show some error messagee
       alert(error);
@@ -146,6 +96,7 @@ export default function Home() {
         name,
       }),
     });
+    resetPicture();
   };
 
   const resetPicture = () => {
