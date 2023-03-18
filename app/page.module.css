@@ -10,7 +10,8 @@
   display: none;
 }
 
-.video, .image {
+.video,
+.image {
   flex: 1;
 }
 
@@ -42,4 +43,62 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.prompt {
+  position: absolute;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #000;
+  width: 250px;
+  top: 100px;
+  left: 50%;
+  margin: 0 -125px;
+}
+
+.prompt h2 {
+  text-align: center;
+}
+
+.prompt .body {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prompt .inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.prompt .inputContainerError input {
+  border-color: rgb(190 18 60);
+}
+
+.prompt input {
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  border-color: transparent;
+  border-width: 1px;
+  border-style: solid;
+  outline: none;
+}
+
+.prompt .error {
+  font-size: 14px;
+  color: rgb(190 18 60);
+}
+
+.prompt button {
+  background: rgb(29 78 216);
+  color: white;
+  font-size: 18px;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
 }

@@ -16,6 +16,7 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   typescript: 5.0.2
+  use-prompt: ^1.1.0
   uuid: ^9.0.0
   zod: ^3.21.4
 
@@ -35,6 +36,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   typescript: 5.0.2
+  use-prompt: 1.1.0_react@18.2.0
   uuid: 9.0.0
   zod: 3.21.4
 
@@ -2389,6 +2391,15 @@ packages:
     dependencies:
       punycode: 1.3.2
       querystring: 0.2.0
+    dev: false
+
+  /use-prompt/1.1.0_react@18.2.0:
+    resolution: {integrity: sha512-J10Zqy8pRoZfe5b0TvEz+/Ez674Rl+eKq/5pL8ZMuTjLeQjLMT7dnL1Y5Qf0E8gEZplqR+OaMJf7VNdfySWPCw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /util/0.12.5:

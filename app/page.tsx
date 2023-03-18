@@ -1,17 +1,65 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import cx from "classnames";
+import { RenderProps, usePrompt } from "use-prompt";
 import { IconButton } from "@/ui/IconButton/IconButton";
 import { PictureIcon } from "@/ui/Icons/PictureIcon";
 import { FlipIcon } from "@/ui/Icons/FlipIcon";
 import { RetryIcon } from "@/ui/Icons/RetryIcon";
 import { UploadIcon } from "@/ui/Icons/UploadIcon";
-import styles from "./page.module.css";
 import { dataUrlToBlob, handleRequest } from "@/lib/browser";
+import styles from "./page.module.css";
 
 const IMAGE_MIME_TYPE = "image/png";
 
+function Prompt({ resolve, visible }: RenderProps) {
+  const [name, setName] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const handlInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const value = e.target.value;
+    if (!value) setError("Enter a name");
+    if (value && error) setError("");
+    setName(value);
+  };
+
+  const submit = () => {
+    if (!name) {
+      setError("Enter a name");
+      return;
+    }
+    resolve(name);
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div className={styles.prompt}>
+      <h2>{"Who's this?"}</h2>
+      <div className={styles.body}>
+        <div
+          className={cx(styles.inputContainer, {
+            [styles.inputContainerError]: !!error,
+          })}
+        >
+          <input type="text" onChange={handlInputChange} />
+          {error && <span className={styles.error}>{error}</span>}
+        </div>
+        <button onClick={() => submit()}>Save</button>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
+  const [prompt, showPrompt] = usePrompt();
   const video = useRef<HTMLVideoElement | null>(null);
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const image = useRef<HTMLImageElement | null>(null);
@@ -92,8 +140,7 @@ export default function Home() {
 
     const upload = handleUpload();
 
-    // Get name non blockingly
-    const name = "Charlie";
+    const name = await showPrompt((props) => <Prompt {...props} />);
 
     const { success, error, data } = await upload;
     if (!success) {
@@ -172,45 +219,48 @@ export default function Home() {
   }, []);
 
   return (
-    <main className={styles.main}>
-      <canvas ref={canvas} className={styles.canvas} />
-      {imageSrc ? (
-        // for some reason data url's completely break nextjs
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          ref={image}
-          className={styles.image}
-          alt="Your pic"
-          src={imageSrc}
-        />
-      ) : (
-        <video ref={video} className={styles.video} />
-      )}
-      <footer className={styles.footer}>
-        <button className={styles.galleryButton} onClick={() => {}} />
+    <>
+      {prompt}
+      <main className={styles.main}>
+        <canvas ref={canvas} className={styles.canvas} />
         {imageSrc ? (
-          <>
-            <IconButton onClick={() => convert()}>
-              <UploadIcon />
-            </IconButton>
-            <IconButton onClick={() => resetPicture()}>
-              <RetryIcon />
-            </IconButton>
-          </>
+          // for some reason data url's completely break nextjs
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            ref={image}
+            className={styles.image}
+            alt="Your pic"
+            src={imageSrc}
+          />
         ) : (
-          <>
-            <IconButton
-              className={styles.pictureButton}
-              onClick={() => takePicture()}
-            >
-              <PictureIcon />
-            </IconButton>
-            <IconButton onClick={() => flipPicture()}>
-              <FlipIcon />
-            </IconButton>
-          </>
+          <video ref={video} className={styles.video} />
         )}
-      </footer>
-    </main>
+        <footer className={styles.footer}>
+          <button className={styles.galleryButton} onClick={() => {}} />
+          {imageSrc ? (
+            <>
+              <IconButton onClick={() => convert()}>
+                <UploadIcon />
+              </IconButton>
+              <IconButton onClick={() => resetPicture()}>
+                <RetryIcon />
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <IconButton
+                className={styles.pictureButton}
+                onClick={() => takePicture()}
+              >
+                <PictureIcon />
+              </IconButton>
+              <IconButton onClick={() => flipPicture()}>
+                <FlipIcon />
+              </IconButton>
+            </>
+          )}
+        </footer>
+      </main>
+    </>
   );
 }
