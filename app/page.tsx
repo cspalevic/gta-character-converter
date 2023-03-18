@@ -1,91 +1,125 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+'use client';
 
-const inter = Inter({ subsets: ['latin'] })
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { IconButton } from '@/ui/IconButton/IconButton';
+import { PictureIcon } from '@/ui/Icons/PictureIcon';
+import { FlipIcon } from '@/ui/Icons/FlipIcon';
+import { RetryIcon } from '@/ui/Icons/RetryIcon';
+import { UploadIcon } from '@/ui/Icons/UploadIcon';
+import styles from './page.module.css';
 
 export default function Home() {
+  const video = useRef<HTMLVideoElement | null>(null);
+  const canvas = useRef<HTMLCanvasElement | null>(null);
+  const image = useRef<HTMLImageElement | null>(null);
+  const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  
+  const getWindowSize = useCallback(() => {
+    let width, height;
+    if (window.innerWidth <= 641) {
+      width = window.innerWidth;
+      height = window.innerHeight * .8;
+    } else if(window.innerWidth <= 961) {
+      // TODO: Do something else
+      width = window.innerWidth;
+      height = window.innerHeight-100;
+    } else {
+      // TODO: Do something else
+      width = window.innerWidth;
+      height = window.innerHeight-100;
+    }
+    return { width, height }
+  }, []);
+
+  const convert = async () => {
+    const gtaImage = await fetch("/api/convert", {
+      method: "POST",
+      body: imageSrc
+    });
+    console.log(gtaImage);
+  }
+  
+  const startCamera = async () => {
+    const { width, height } = getWindowSize();
+
+    const camera = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width,
+          height,
+          facingMode
+        }
+    });
+    if(video.current) {
+      video.current.srcObject = camera;
+      video.current.play();
+    }
+  }
+
+  const resetPicture = () => {
+    setImageSrc(null);
+    startCamera();
+  }
+
+  const takePicture = () => {
+    if(!video.current || !canvas.current) return;
+
+    const { width, height } = getWindowSize();
+
+    const context = canvas.current.getContext("2d");
+    canvas.current.width = width;
+    canvas.current.height = height;
+    context?.drawImage(video.current, 0, 0, width, height);
+
+    const dataUrl = canvas.current.toDataURL("image/png");
+    setImageSrc(dataUrl);
+  }
+
+  const flipPicture = () => {
+    setFacingMode(facingMode === "user" ? "environment" : "user");
+    startCamera();
+  }
+
+  useEffect(() => {
+    startCamera();
+    window.addEventListener("resize", startCamera);
+    return () => {
+      window.removeEventListener("resize", startCamera);
+    }
+  }, [])
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <canvas ref={canvas} className={styles.canvas} />
+      {imageSrc ? (
+        // for some reason data url's completely break nextjs
+        // eslint-disable-next-line @next/next/no-img-element
+        <img ref={image} className={styles.image} alt="Your pic" src={imageSrc} />
+      ) : (
+        <video ref={video} className={styles.video} />
+      )}
+      <footer className={styles.footer}>
+        <button className={styles.galleryButton} onClick={() => {}} />
+        {imageSrc ? (
+          <>
+            <IconButton onClick={() => convert()}>
+              <UploadIcon />
+            </IconButton>
+            <IconButton onClick={() => resetPicture()}>
+              <RetryIcon />
+            </IconButton>
+          </>
+        ) : (
+          <>
+            <IconButton className={styles.pictureButton} onClick={() => takePicture()}>
+              <PictureIcon />
+            </IconButton>
+            <IconButton onClick={() => flipPicture()}>
+              <FlipIcon />
+            </IconButton>
+          </>
+        )}
+      </footer>
     </main>
   )
 }

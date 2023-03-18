@@ -1,0 +1,7 @@
+.iconButton {
+    background: rgb(38 38 38);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 10px
+}
