@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { nanoid } from "nanoid";
-import { createPresignedUpload } from "@/apps/web-gallery/lib/s3";
+import { createPresignedUpload } from "@/lib/s3";
 import { createUpload } from "@/lib/models/upload";
 
 const uploadSchema = z.object({
