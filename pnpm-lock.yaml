@@ -4,12 +4,12 @@ specifiers:
   '@types/node': 18.15.3
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
-  '@types/uuid': ^9.0.1
   aws-sdk: ^2.1338.0
   classnames: ^2.3.2
   eslint: 8.36.0
   eslint-config-next: 13.2.4
   mongodb: ^5.1.0
+  nanoid: ^4.0.1
   next: 13.2.4
   next-auth: ^4.20.1
   prettier: ^2.8.4
@@ -17,19 +17,18 @@ specifiers:
   react-dom: 18.2.0
   typescript: 5.0.2
   use-prompt: ^1.1.0
-  uuid: ^9.0.0
   zod: ^3.21.4
 
 dependencies:
   '@types/node': 18.15.3
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
-  '@types/uuid': 9.0.1
   aws-sdk: 2.1338.0
   classnames: 2.3.2
   eslint: 8.36.0
   eslint-config-next: 13.2.4_j4766f7ecgqbon3u7zlxn5zszu
   mongodb: 5.1.0
+  nanoid: 4.0.1
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.20.1_ld2jel3hspngo3u5lti2kgl2sq
   prettier: 2.8.4
@@ -37,7 +36,6 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   typescript: 5.0.2
   use-prompt: 1.1.0_react@18.2.0
-  uuid: 9.0.0
   zod: 3.21.4
 
 packages:
@@ -308,10 +306,6 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
-    dev: false
-
-  /@types/uuid/9.0.1:
-    resolution: {integrity: sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==}
     dev: false
 
   /@types/webidl-conversions/7.0.0:
@@ -1709,6 +1703,12 @@ packages:
     hasBin: true
     dev: false
 
+  /nanoid/4.0.1:
+    resolution: {integrity: sha512-udKGtCCUafD3nQtJg9wBhRP3KMbPglUsgV5JVsXhvyBs/oefqb4sqMEhKBBgqZncYowu58p1prsZQBYvAj/Gww==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
+
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: false
@@ -2419,11 +2419,6 @@ packages:
 
   /uuid/8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    hasBin: true
-    dev: false
-
-  /uuid/9.0.0:
-    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
     dev: false
 

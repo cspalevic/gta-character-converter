@@ -1,0 +1,46 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.canvas {
+  display: none;
+}
+
+.video,
+.image {
+  flex: 1;
+}
+
+.galleryButton {
+  width: 60px;
+  height: 60px;
+  background: transparent;
+  border: none;
+}
+
+.pictureButton {
+  background: none;
+  padding: 0;
+}
+
+.pictureButton circle:nth-child(2) {
+  transition: stroke-width 0.7s;
+}
+
+.pictureButton:active circle:nth-child(2) {
+  stroke-width: 10;
+}
+
+.footer {
+  width: 100%;
+  height: 120px;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

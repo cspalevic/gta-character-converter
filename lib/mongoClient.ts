@@ -4,10 +4,13 @@ if (!process.env.MONGODB_CONNECTION_URI) {
   throw new Error("Invalid mongo connection uri");
 }
 
-export const DB_NAME = "gta-characters";
-export const COLLECTIONS = {
-  CHARACTER: "characters",
-  UPLOAD: "uploads",
+export const dbInfo = {
+  characterConverter: {
+    name: "character-converter",
+    collections: {
+      uploads: "uploads",
+    },
+  },
 };
 
 const uri = process.env.MONGODB_CONNECTION_URI;

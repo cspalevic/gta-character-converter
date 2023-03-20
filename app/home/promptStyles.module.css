@@ -1,0 +1,66 @@
+.prompt {
+  position: absolute;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #000;
+  width: 350px;
+  top: 100px;
+  left: 50%;
+  margin: 0 -125px;
+}
+
+.prompt h2 {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.prompt .body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prompt .inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.prompt .inputContainerError input {
+  border-bottom-color: rgb(190 18 60);
+}
+
+.prompt input {
+  padding: 5px;
+  font-size: 16px;
+  border: none;
+  border-bottom-color: #fff;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  outline: none;
+  background: transparent;
+}
+
+.prompt .error {
+  font-size: 14px;
+  color: rgb(190 18 60);
+}
+
+.prompt button {
+  width: 100%;
+  background: rgb(29 78 216);
+  color: white;
+  font-size: 18px;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.galleryLink {
+  padding: 10px;
+}

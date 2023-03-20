@@ -1,58 +1,20 @@
 "use client";
 
-import { ChangeEventHandler, useEffect, useRef, useState } from "react";
-import cx from "classnames";
-import { RenderProps, usePrompt } from "use-prompt";
+import { useEffect, useRef, useState } from "react";
+import { usePrompt } from "use-prompt";
+import Link from "next/link";
 import { IconButton } from "@/ui/IconButton/IconButton";
 import { PictureIcon } from "@/ui/Icons/PictureIcon";
 import { FlipIcon } from "@/ui/Icons/FlipIcon";
 import { RetryIcon } from "@/ui/Icons/RetryIcon";
 import { UploadIcon } from "@/ui/Icons/UploadIcon";
-import { dataUrlToBlob, handleRequest } from "@/lib/browser";
-import styles from "./page.module.css";
+import { GalleryIcon } from "@/ui/Icons/GalleryIcon";
 import { useCamera } from "@/lib/hooks/camera";
-import { useUpload } from "@/lib/hooks/upload";
+import { useUploadSession } from "@/lib/hooks/uploadSession";
+import Prompt from "./Prompt";
+import styles from "./pageStyles.module.css";
 
 const IMAGE_MIME_TYPE = "image/png";
-
-function Prompt({ resolve, visible }: RenderProps) {
-  const [name, setName] = useState<string>("");
-  const [error, setError] = useState<string>("");
-
-  const handlInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value;
-    if (!value) setError("Enter a name");
-    if (value && error) setError("");
-    setName(value);
-  };
-
-  const submit = () => {
-    if (!name) {
-      setError("Enter a name");
-      return;
-    }
-    resolve(name);
-  };
-
-  if (!visible) return null;
-
-  return (
-    <div className={styles.prompt}>
-      <h2>{"Who's this?"}</h2>
-      <div className={styles.body}>
-        <div
-          className={cx(styles.inputContainer, {
-            [styles.inputContainerError]: !!error,
-          })}
-        >
-          <input type="text" onChange={handlInputChange} />
-          {error && <span className={styles.error}>{error}</span>}
-        </div>
-        <button onClick={() => submit()}>Save</button>
-      </div>
-    </div>
-  );
-}
 
 export default function Home() {
   const video = useRef<HTMLVideoElement | null>(null);
@@ -61,41 +23,17 @@ export default function Home() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [prompt, showPrompt] = usePrompt();
   const { startCamera, flipCamera, getSnapshot } = useCamera(video);
-  const upload = useUpload();
+  const { uploadFile, complete } = useUploadSession();
 
   const convert = async () => {
     if (!imageSrc) return;
 
-    const pendingUpload = upload(imageSrc, IMAGE_MIME_TYPE);
+    const pendingUpload = uploadFile(imageSrc, IMAGE_MIME_TYPE);
 
-    const name = await showPrompt((props) => <Prompt {...props} />);
+    await showPrompt((props) => (
+      <Prompt {...props} fileUpload={pendingUpload} completeUpload={complete} />
+    ));
 
-    const { success, error, data } = await pendingUpload;
-    if (!success) {
-      // Show some error messagee
-      alert(error);
-    }
-
-    // Loading spinner now?
-    const {
-      uploadId,
-      prediction: {
-        id: predictionId,
-        created_at: createdAt,
-        completed_at: completedAt,
-      },
-    } = data;
-
-    await handleRequest("/api/character", {
-      method: "POST",
-      body: JSON.stringify({
-        uploadId,
-        predictionId,
-        createdAt,
-        completedAt,
-        name,
-      }),
-    });
     resetPicture();
   };
 
@@ -138,7 +76,9 @@ export default function Home() {
           <video ref={video} className={styles.video} playsInline />
         )}
         <footer className={styles.footer}>
-          <button className={styles.galleryButton} onClick={() => {}} />
+          <Link className={styles.galleryLink} href="/gallery">
+            <GalleryIcon width={55} height={55} />
+          </Link>
           {imageSrc ? (
             <>
               <IconButton onClick={() => convert()}>
@@ -157,7 +97,7 @@ export default function Home() {
                 <PictureIcon />
               </IconButton>
               <IconButton onClick={() => flipCamera()}>
-                <FlipIcon />
+                <FlipIcon width={35} height={35} />
               </IconButton>
             </>
           )}
