@@ -1,42 +1,50 @@
 lockfileVersion: 5.4
 
-specifiers:
-  '@types/node': 18.15.3
-  '@types/react': 18.0.28
-  '@types/react-dom': 18.0.11
-  aws-sdk: ^2.1338.0
-  classnames: ^2.3.2
-  eslint: 8.36.0
-  eslint-config-next: 13.2.4
-  mongodb: ^5.1.0
-  nanoid: ^4.0.1
-  next: 13.2.4
-  next-auth: ^4.20.1
-  prettier: ^2.8.4
-  react: 18.2.0
-  react-dom: 18.2.0
-  typescript: 5.0.2
-  use-prompt: ^1.1.0
-  zod: ^3.21.4
+importers:
 
-dependencies:
-  '@types/node': 18.15.3
-  '@types/react': 18.0.28
-  '@types/react-dom': 18.0.11
-  aws-sdk: 2.1338.0
-  classnames: 2.3.2
-  eslint: 8.36.0
-  eslint-config-next: 13.2.4_j4766f7ecgqbon3u7zlxn5zszu
-  mongodb: 5.1.0
-  nanoid: 4.0.1
-  next: 13.2.4_biqbaboplfbrettd7655fr4n2y
-  next-auth: 4.20.1_ld2jel3hspngo3u5lti2kgl2sq
-  prettier: 2.8.4
-  react: 18.2.0
-  react-dom: 18.2.0_react@18.2.0
-  typescript: 5.0.2
-  use-prompt: 1.1.0_react@18.2.0
-  zod: 3.21.4
+  .:
+    specifiers:
+      prettier: ^2.8.4
+      turbo: ^1.8.3
+    dependencies:
+      prettier: 2.8.4
+      turbo: 1.8.3
+
+  apps/web-gallery:
+    specifiers:
+      '@types/node': 18.15.3
+      '@types/react': 18.0.28
+      '@types/react-dom': 18.0.11
+      aws-sdk: ^2.1338.0
+      classnames: ^2.3.2
+      eslint: 8.36.0
+      eslint-config-next: 13.2.4
+      mongodb: ^5.1.0
+      nanoid: ^4.0.1
+      next: 13.2.4
+      next-auth: ^4.20.1
+      react: 18.2.0
+      react-dom: 18.2.0
+      typescript: 5.0.2
+      use-prompt: ^1.1.0
+      zod: ^3.21.4
+    dependencies:
+      '@types/node': 18.15.3
+      '@types/react': 18.0.28
+      '@types/react-dom': 18.0.11
+      aws-sdk: 2.1338.0
+      classnames: 2.3.2
+      eslint: 8.36.0
+      eslint-config-next: 13.2.4_j4766f7ecgqbon3u7zlxn5zszu
+      mongodb: 5.1.0
+      nanoid: 4.0.1
+      next: 13.2.4_biqbaboplfbrettd7655fr4n2y
+      next-auth: 4.20.1_ld2jel3hspngo3u5lti2kgl2sq
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      typescript: 5.0.2
+      use-prompt: 1.1.0_react@18.2.0
+      zod: 3.21.4
 
 packages:
 
@@ -562,8 +570,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /caniuse-lite/1.0.30001467:
-    resolution: {integrity: sha512-cEdN/5e+RPikvl9AHm4uuLXxeCNq8rFsQ+lPHTfe/OtypP3WwnVVbjn+6uBV7PaFL6xUFzTh+sSCOz1rKhcO+Q==}
+  /caniuse-lite/1.0.30001468:
+    resolution: {integrity: sha512-zgAo8D5kbOyUcRAgSmgyuvBkjrGk5CGYG5TYgFdpQv+ywcyEpo1LOWoG8YmoflGnh+V+UsNuKYedsoYs0hzV5A==}
     dev: false
 
   /chalk/4.1.2:
@@ -1761,7 +1769,7 @@ packages:
     dependencies:
       '@next/env': 13.2.4
       '@swc/helpers': 0.4.14
-      caniuse-lite: 1.0.30001467
+      caniuse-lite: 1.0.30001468
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -2343,6 +2351,67 @@ packages:
     dependencies:
       tslib: 1.14.1
       typescript: 5.0.2
+    dev: false
+
+  /turbo-darwin-64/1.8.3:
+    resolution: {integrity: sha512-bLM084Wr17VAAY/EvCWj7+OwYHvI9s/NdsvlqGp8iT5HEYVimcornCHespgJS/yvZDfC+mX9EQkn3V2JmYgGGw==}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /turbo-darwin-arm64/1.8.3:
+    resolution: {integrity: sha512-4oZjXtzakopMK110kue3z/hqu3WLv+eDLZOX1NGdo49gqca9BeD8GbH+sXpAp6tqyeuzpss+PIliVYuyt7LgbA==}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /turbo-linux-64/1.8.3:
+    resolution: {integrity: sha512-uvX2VKotf5PU14FCxJA5iHItPQno2JWzerMd+g3/h/Asay6dvxvtVjc39MQeGT0H5njSvzVKFkT+3/5q8lgOEg==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /turbo-linux-arm64/1.8.3:
+    resolution: {integrity: sha512-E1p+oH3XKMaPS4rqWhYsL4j2Pzc0d/9P5KU7Kn1kqVLo2T3iRA7n2KVULEieUNE0nTH+aIJPXYXOpqCI5wFJaA==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /turbo-windows-64/1.8.3:
+    resolution: {integrity: sha512-cnzAytHtoLXd0J7aNzRpZFpL/GTjcBmkvAPlbOdf/Pl1iwS4qzGrudZQ+OM1lmLgLIfBPIavsGHBknTwTNib4A==}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /turbo-windows-arm64/1.8.3:
+    resolution: {integrity: sha512-ulIiItNm2w/zYJdD5/oAzjzNns1IjbpweRzpsE8tLXaWwo6+fnXXkyloUug0IUhcd2k6fJXfoiDZfygqpOVuXg==}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /turbo/1.8.3:
+    resolution: {integrity: sha512-zGrkU1EuNFmkq6iky6LcMqD4h0OLE8XysVFxQWRIZbcTNnf0XAycbsbeEyiJpiWeqb7qtg2bVuY9EYcNoNhVuQ==}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      turbo-darwin-64: 1.8.3
+      turbo-darwin-arm64: 1.8.3
+      turbo-linux-64: 1.8.3
+      turbo-linux-arm64: 1.8.3
+      turbo-windows-64: 1.8.3
+      turbo-windows-arm64: 1.8.3
     dev: false
 
   /type-check/0.4.0:
