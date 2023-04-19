@@ -1,0 +1,15 @@
+{
+  "name": "background-jobs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "serverless offline",
+    "deploy": "serverless deploy",
+    "deploy:verbose": "serverless deploy --verbose"
+  },
+  "dependencies": {
+    "serverless": "^3.30.1",
+    "serverless-offline": "^12.0.4",
+    "serverless-python-requirements": "^6.0.0"
+  }
+}

@@ -1,0 +1,27 @@
+org: cedomirspalevic
+app: background-jobs
+service: background-jobs
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: us-east-1
+functions:
+  check-conversion-status:
+    handler: handler.check_conversion_status
+    events:
+      - schedule: rate(10 minutes)
+  create-conversion:
+    handler: handler.create_conversion
+plugins:
+  - serverless-python-requirements
+  - serverless-offline
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+package:
+  exclude:
+    - ./**
+  include:
+    - shared/**
+    - handler.py
