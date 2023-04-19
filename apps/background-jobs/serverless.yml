@@ -1,27 +1,34 @@
 org: cedomirspalevic
 app: background-jobs
 service: background-jobs
+useDotenv: true
 provider:
   name: aws
   runtime: python3.8
   stage: dev
   region: us-east-1
+  environment:
+    REPLICATE_API_TOKEN: ${env:REPLICATE_API_TOKEN} 
+    GTA5_LORA_VERSION: ${env:GTA5_LORA_VERSION}
+    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+    AWS_BUCKET: ${env:AWS_BUCKET}
 functions:
   check-conversion-status:
-    handler: handler.check_conversion_status
+    handler: src/handler.check_conversion_status
     events:
       - schedule: rate(10 minutes)
   create-conversion:
-    handler: handler.create_conversion
+    handler: src/handler.create_conversion
 plugins:
   - serverless-python-requirements
   - serverless-offline
+  - serverless-dotenv-plugin
 custom:
   pythonRequirements:
-    dockerizePip: non-linux
+    fileName: requirements.txt
 package:
   exclude:
     - ./**
   include:
-    - shared/**
-    - handler.py
+    - src/**

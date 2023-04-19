@@ -1,0 +1,5 @@
+{
+  "watch": ["src/**"],
+  "ext": "py",
+  "exec": "serverless offline"
+}
