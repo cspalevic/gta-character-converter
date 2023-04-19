@@ -12,6 +12,14 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "gta-characters.s3.amazonaws.com",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

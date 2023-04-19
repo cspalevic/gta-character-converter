@@ -1,47 +1,49 @@
 import { z } from "zod";
 import { nanoid } from "nanoid";
 import { createPresignedUpload } from "@/lib/s3";
-import { createUpload } from "@/lib/models/upload";
+import { getClient } from "@/lib/supabase";
 
-const uploadSchema = z.object({
+const createUploadSchema = z.object({
   fileType: z.string(),
 });
 
 export async function POST(request: Request) {
   const input = await request.json();
-  const schema = uploadSchema.safeParse(input);
+  const schema = createUploadSchema.safeParse(input);
   if (!schema.success) {
     return new Response(JSON.stringify(schema.error), {
       status: 400,
     });
   }
 
-  const uploadId = nanoid();
+  const referenceId = nanoid();
   const [presignedUpload, upload] = await Promise.allSettled([
-    createPresignedUpload(uploadId, schema.data.fileType),
-    createUpload({
-      id: uploadId,
-      status: "pending",
-      name: null,
-      createdAt: new Date().toISOString(),
-      completedAt: null,
-    }),
+    createPresignedUpload(referenceId, schema.data.fileType),
+    getClient("upload")
+      .insert({
+        reference_id: referenceId,
+        completed_at: null,
+        name: null,
+        status: "started",
+      })
+      .select()
+      .throwOnError(),
   ]);
 
   if (presignedUpload.status === "rejected") {
-    console.error("Error creating presigned upload with S3");
-    console.error(presignedUpload.reason);
+    console.error("Error creating presigned upload with S3", {
+      reason: presignedUpload.reason,
+    });
     return new Response("Something went wrong", { status: 500 });
   }
 
   if (upload.status === "rejected") {
-    console.error("Error creating upload in DB");
-    console.error(upload.reason);
+    console.error("Error creating upload in DB", { reason: upload.reason });
     return new Response("Something went wrong", { status: 500 });
   }
 
   const { url, fields } = presignedUpload.value;
-  return new Response(JSON.stringify({ uploadId, url, fields }), {
+  return new Response(JSON.stringify({ uploadId: referenceId, url, fields }), {
     status: 201,
   });
 }

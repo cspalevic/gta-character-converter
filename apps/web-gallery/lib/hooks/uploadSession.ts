@@ -14,7 +14,7 @@ export const useUploadSession = () => {
           }
 
           const [uploadSession] = await Promise.allSettled([
-            await fetch("/api/upload/session", {
+            fetch("/api/upload", {
               method: "POST",
               body: JSON.stringify({ fileType: mimeType }),
             }),
@@ -36,7 +36,7 @@ export const useUploadSession = () => {
           );
 
           const [s3Upload] = await Promise.allSettled([
-            await fetch(url, {
+            fetch(url, {
               method: "POST",
               body: formData,
             }),
@@ -62,7 +62,7 @@ export const useUploadSession = () => {
       name: string
     ): Promise<PromiseSettledResult<"Ok">> => {
       const [completedUpload] = await Promise.allSettled([
-        await fetch(`/api/upload/session/${uploadId}/complete`, {
+        fetch(`/api/upload/${uploadId}/complete`, {
           method: "POST",
           body: JSON.stringify({
             name,
