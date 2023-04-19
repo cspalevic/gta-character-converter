@@ -12,6 +12,7 @@ export async function POST(request: Request, { params }: Params) {
   if (!referenceId) return new Response("Not found", { status: 404 });
 
   // Get item from S3
+  console.log(request);
   const image = "";
 
   // Create replicate
