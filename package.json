@@ -8,8 +8,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "lint": "turbo run lint",
-    "deploy": "turbo run deploy"
+    "lint": "turbo run lint"
   },
   "dependencies": {
     "prettier": "^2.8.4",
