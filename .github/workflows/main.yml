@@ -31,7 +31,7 @@ jobs:
            run: pnpm install
 
          - name: Deploy background jobs
-           uses: serverless@github-action@v3.1
+           uses: serverless/github-action@v3.1
            with: 
              args: -c "cd ./apps/background-jobs && serverless deploy"
              entrypoint: /bin/sh
