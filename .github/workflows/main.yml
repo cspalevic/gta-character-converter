@@ -17,9 +17,10 @@ jobs:
            with:
              node-version: 18
 
-         - name: Install pnpm
-           run: |
-            curl -L https://raw.githubusercontent.com/pnpm/self-installer/master/install.js | node echo "$(pnpm bin -g)" >> $GITHUB_PATH
+         - name: Setup pnpm
+           uses: pnpm/action-setup@v2
+           with:
+             version: 7.23.0
 
          - name: Setup Python3
            uses: actions/setup-python@v2
