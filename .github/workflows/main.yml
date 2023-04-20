@@ -27,12 +27,9 @@ jobs:
            with:
              python-version: 3.8
 
-         - name: Install dependencies
-           run: pnpm install
-
-         - name: Deploy background jobs
-           run: pnpm run deploy
-           env:         
+         - name: Setup env
+           uses: ozaytev86/create-env-file@v1
+           with: 
              REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
              SUPABASE_PROJECT_URL: ${{ secrets.SUPABASE_PROJECT_URL }}
              SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
@@ -40,3 +37,9 @@ jobs:
              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
              AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
              SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+
+         - name: Install dependencies
+           run: pnpm install
+
+         - name: Deploy background jobs
+           run: pnpm run deploy
