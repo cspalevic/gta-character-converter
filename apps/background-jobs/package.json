@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nodemon",
     "deploy": "serverless deploy",
-    "deploy:verbose": "serverless deploy --verbose"
+    "deploy:verbose": "serverless deploy --verbose",
+    "format": "python3 -m black src/"
   },
   "dependencies": {
     "nodemon": "^2.0.22",

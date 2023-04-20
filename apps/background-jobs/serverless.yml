@@ -8,10 +8,9 @@ provider:
   stage: dev
   region: us-east-1
   environment:
-    REPLICATE_API_TOKEN: ${env:REPLICATE_API_TOKEN} 
-    GTA5_LORA_VERSION: ${env:GTA5_LORA_VERSION}
-    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+    REPLICATE_API_TOKEN: ${env:REPLICATE_API_TOKEN}
+    SUPABASE_PROJECT_URL: ${env:SUPABASE_PROJECT_URL}
+    SUPABASE_API_KEY: ${env:SUPABASE_API_KEY}
     AWS_BUCKET: ${env:AWS_BUCKET}
 functions:
   check-conversion-status:

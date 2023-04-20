@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getPresignedUrl } from "@/lib/s3";
 import { getClient } from "@/lib/supabase";
+import styles from "./page.module.css";
 
 async function getImages() {
   const uploads = await getClient("upload")
@@ -21,19 +22,12 @@ export default async function Gallery() {
   const uploads = await getImages();
   return (
     <>
-      <main>
-        <h1>Hi</h1>
-        {uploads.map(
-          ({ reference_id, name, completed_at, created_at, url }) => (
-            <div key={reference_id}>
-              <p>{name}</p>
-              <Image alt="test" src={url} width="50" height="50" />
-              <span>Created at: {created_at}</span>
-              <br />
-              <span>Completed at: {completed_at}</span>
-            </div>
-          )
-        )}
+      <main className={styles.gallery}>
+        {uploads.map(({ reference_id, name, url }) => (
+          <div key={reference_id}>
+            <Image alt={name} src={url} width="828" height="466" />
+          </div>
+        ))}
       </main>
     </>
   );
